@@ -6,4 +6,5 @@ app = Flask(__name__)
 def index():
     return 'Web App with Python Flask!'
 
-app.run()
+if __name__ == '__name__':
+	app.run()
