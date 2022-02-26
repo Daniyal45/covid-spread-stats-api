@@ -1,9 +1,11 @@
 from flask import Flask
+from predict import predict
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return '<h2> Covid Spread Stats Service </h2>'
+    result = predict()
+    return (result)
 
 if __name__ == '__main__':
     app.run()
