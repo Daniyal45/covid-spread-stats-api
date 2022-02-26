@@ -46,5 +46,5 @@ def predict():
     result = json.dumps(x)
     return (result)
 
-
+print(predict())
 
