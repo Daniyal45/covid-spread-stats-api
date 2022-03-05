@@ -1,3 +1,4 @@
+from urllib import response
 from flask import Flask, request
 from csv_generator import generate_csv
 import json
@@ -8,7 +9,9 @@ app = Flask(__name__)
 def hello_world():
     country = request.args['country']
     result = generate_csv(country)
-    return (json.dumps(result))
+    response = flask.jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return (response)
 
 if __name__ == '__main__':
     app.run()
