@@ -41,9 +41,13 @@ def predict():
     predict = lr.predict(test[predictors])
     actual = test["Daily_Cases"]
     r2_score(actual,predict)
-    sqrt(mean_squared_error(predict, actual))
-    final = lr.predict([[2400, 33]])
-    x = { "prediction": final[0] }
+    error = sqrt(mean_squared_error(predict, actual))
+    previous_data_for_prediction_reference = df.tail(1).values.tolist()
+    previous_day_cases_reference = previous_data_for_prediction_reference[0][1]
+    previous_day_deaths_reference = previous_data_for_prediction_reference[0][3]
+    # print(previous_day_cases_reference,previous_day_deaths_reference )
+    final = lr.predict([[previous_day_cases_reference, previous_day_deaths_reference]])
+    x = { "prediction": final[0], "r2_score": r2_score(actual,predict) }
     result = json.dumps(x)
     return (result)
 
