@@ -10,7 +10,7 @@ def generate_csv(country):
   r = requests.get(url = URL)
   df = pd.DataFrame(list())
   df.to_csv('data_file.csv')
-  response = r.json()``
+  response = r.json()
   data = response.items()
   for key, value in data:
       if key == 'data':
