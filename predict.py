@@ -10,7 +10,8 @@ from sklearn.linear_model import LinearRegression
 import json
 
 def predict():
-    df = pd.read_csv("final.csv" , index_col= "Date", parse_dates = True)
+    # df = pd.read_csv("final.csv" , index_col= "Date", parse_dates = True)
+    df = pd.read_csv("data_file.csv" , index_col= "Date", parse_dates = True)
     a = ["New_Cases", "New_Deaths"]
     data = df[a]
     data.tail()
@@ -46,5 +47,4 @@ def predict():
     result = json.dumps(x)
     return (result)
 
-print(predict())
 
