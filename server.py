@@ -9,7 +9,7 @@ app = Flask(__name__)
 def hello_world():
     country = request.args['country']
     result = generate_csv(country)
-    return (result)
+    return (json.dumps(result))
 
 if __name__ == '__main__':
     app.run()
