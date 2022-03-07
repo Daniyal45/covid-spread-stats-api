@@ -3,7 +3,7 @@
 
 import pandas as pd
 import numpy as np
-from math import sqrt
+from math import sqrt, floor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 from sklearn.linear_model import LinearRegression
@@ -40,14 +40,26 @@ def predict():
     lr.fit(train[predictors], train["Daily_Cases"])
     predict = lr.predict(test[predictors])
     actual = test["Daily_Cases"]
-    r2_score(actual,predict)
+    accuracy = r2_score(actual,predict)
     error = sqrt(mean_squared_error(predict, actual))
     previous_data_for_prediction_reference = df.tail(1).values.tolist()
     previous_day_cases_reference = previous_data_for_prediction_reference[0][1]
     previous_day_deaths_reference = previous_data_for_prediction_reference[0][3]
-    # print(previous_day_cases_reference,previous_day_deaths_reference )
+    
+    day_before_yesterday_reference = df.tail(2).values.tolist()
+    cases_this_day = day_before_yesterday_reference[1][1]
+    cases_yesterday = day_before_yesterday_reference[0][1]
+    percentageCases = (cases_yesterday + cases_this_day) / 2  # Take average of previous 2 days
+    percentageCases = percentageCases / 10  # Take 10% of that average
+    if cases_this_day > cases_yesterday:
+        percentageCases = floor(abs(percentageCases + cases_this_day))  #either add or subtract that avg from today's cases
+    else:
+        percentageCases = floor(abs(cases_this_day - percentageCases))
     final = lr.predict([[previous_day_cases_reference, previous_day_deaths_reference]])
-    x = { "prediction": final[0], "r2_score": r2_score(actual,predict) }
+    cases = percentageCases
+    if accuracy >= 0.83:
+        cases =  final[0]
+    x = { "prediction": cases, "score": r2_score(actual,predict) }
     result = json.dumps(x)
     return (result)
 
